@@ -1,0 +1,117 @@
+{
+  "SchemaVersion": "1.0.0",
+  "Author": "Mighty Morphin Windows Rangers // Invoke-MorphinStartup.ps1",
+  "UpdatedAtUtc": "2026-11-18T22:18:00.0000000Z",
+  "VerifyAuthenticode": false,
+  "CustomModules": [
+    {
+      "ModuleName": "Morphin.Alpha5Greeting",
+      "ZordName": "Tyrannosaurus & Alpha-5 Command Center Briefing Zord",
+      "ModulePath": "modules\\Morphin.Alpha5Greeting.psm1",
+      "Enabled": true,
+      "Settings": {
+        "RangerCallsign": "Professor Ranger",
+        "EnableVoiceTts": false
+      }
+    },
+    {
+      "ModuleName": "Morphin.NetCheck",
+      "ZordName": "Triceratops Network & VPN Telemetry Zord",
+      "ModulePath": "modules\\Morphin.NetCheck.psm1",
+      "Enabled": true,
+      "Settings": {
+        "PingTarget": "1.1.1.1",
+        "DnsCheckHost": "github.com",
+        "CheckVpn": true
+      }
+    },
+    {
+      "ModuleName": "Morphin.CyberLab",
+      "ZordName": "Mastodon Cyber Range & WSL2 Zord",
+      "ModulePath": "modules\\Morphin.CyberLab.psm1",
+      "Enabled": true,
+      "Settings": {
+        "WslDistro": "kali-linux",
+        "DockerContainer": "so-crates-lab"
+      }
+    }
+  ],
+  "StartupApplications": [
+    {
+      "Name": "Visual Studio Code",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+      "Arguments": "",
+      "ProcessName": "Code",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "Wireshark 4.4.2 (64-bit)",
+      "Origin": "Registry (HKLM (64-Bit))",
+      "ExecutablePath": "C:\\Program Files\\Wireshark\\Wireshark.exe",
+      "Arguments": "",
+      "ProcessName": "Wireshark",
+      "DelaySeconds": 3,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "Obsidian",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Programs\\Obsidian\\Obsidian.exe",
+      "Arguments": "",
+      "ProcessName": "Obsidian",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "Discord",
+      "Origin": "User Startup Folder (shell:startup)",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Discord\\Update.exe",
+      "Arguments": "--processStart Discord.exe",
+      "ProcessName": "Discord",
+      "DelaySeconds": 2,
+      "WindowStyle": "Minimized"
+    }
+  ],
+  "BrowserConfiguration": {
+    "Enabled": true,
+    "BrowserKey": "Chrome",
+    "BrowserName": "Google Chrome",
+    "ExecutablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "ProfileName": "Default",
+    "LaunchMode": "ChromeNativeTabGroups",
+    "TabGroups": [
+      {
+        "GroupName": "SOC & Threat Intel",
+        "Color": "red",
+        "Collapsed": false,
+        "Urls": [
+          "https://gchq.github.io/CyberChef/",
+          "https://www.virustotal.com/gui/home/search",
+          "https://attack.mitre.org/"
+        ]
+      },
+      {
+        "GroupName": "Professor Command Deck",
+        "Color": "blue",
+        "Collapsed": false,
+        "Urls": [
+          "https://github.com/popeye1919",
+          "https://scholar.google.com/",
+          "https://so-crates.org/"
+        ]
+      },
+      {
+        "GroupName": "90s Hacker Dad Shack",
+        "Color": "green",
+        "Collapsed": true,
+        "Urls": [
+          "https://w4dv.club/repeaters/area-repeaters/",
+          "https://chirpmyradio.com/projects/chirp/wiki/Home",
+          "http://phrack.org/"
+        ]
+      }
+    ]
+  }
+}

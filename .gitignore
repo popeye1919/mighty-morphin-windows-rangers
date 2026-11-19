@@ -1,0 +1,13 @@
+# User-specific generated startup profile (keep example profile tracked)
+config/startup-profile.json
+config/chrome-tabgroups-ext/
+
+# Pre-change backups & runtime logs
+backups/
+logs/
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
