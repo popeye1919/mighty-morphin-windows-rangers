@@ -42,8 +42,15 @@
 .PARAMETER ModuleName
     Used with -Mode NewModule to specify the name of the new custom PowerShell module (e.g., "Morphin.MyCustomZord").
 
+.PARAMETER Profile
+    Selects a built-in Ranger Startup Loadout Profile (or your own Custom profile):
+      - Custom         : (Default) Uses your personal .\config\startup-profile.json
+      - PentestLab     : Green Dragonzord Offensive & Forensics Lab (VMware Workstation / VirtualBox VMs, Wireshark, Kali WSL2, Red Team Chrome Tab Groups)
+      - HamShack       : Yellow Sabertooth Ultimate Budget Ham Shack (VK1ED concept: USB CAT COM probe, FLRIG -> WSJT-X -> GridTracker -> Ham2K -> CHIRP + WallBoard Tab Groups)
+      - CyberProfessor : Blue Triceratops Academic & Grading Deck (VS Code, Obsidian, Docker SO-CRATES, Course/CLARK/Scholar Chrome Tab Groups)
+
 .PARAMETER ConfigPath
-    Path to the JSON startup profile. Defaults to .\config\startup-profile.json.
+    Path to the JSON startup profile. Overrides -Profile when explicitly specified.
 
 .PARAMETER UseGridView
     When specified on Windows, opens PowerShell's graphical Out-GridView (-PassThru) picker.
@@ -60,8 +67,9 @@
 .EXAMPLE
     .\Invoke-MorphinStartup.ps1
     .\Invoke-MorphinStartup.ps1 -Mode Wizard
-    .\Invoke-MorphinStartup.ps1 -Mode Wizard -UseGridView
-    .\Invoke-MorphinStartup.ps1 -Mode Run
+    .\Invoke-MorphinStartup.ps1 -Mode Run -Profile PentestLab
+    .\Invoke-MorphinStartup.ps1 -Mode Run -Profile HamShack
+    .\Invoke-MorphinStartup.ps1 -Mode Run -Profile CyberProfessor
     .\Invoke-MorphinStartup.ps1 -Mode NewModule -ModuleName "Morphin.HamRadio"
     .\Invoke-MorphinStartup.ps1 -Mode ListModules
 #>
@@ -71,6 +79,10 @@ param(
     [Parameter(Position = 0)]
     [ValidateSet("Menu", "Wizard", "Run", "Audit", "ListModules", "NewModule", "Install", "ExportAudit", "Demo")]
     [string]$Mode = "Menu",
+
+    [Parameter()]
+    [ValidateSet("Custom", "PentestLab", "HamShack", "CyberProfessor")]
+    [string]$Profile = "Custom",
 
     [Parameter()]
     [string]$ModuleName = "",
@@ -96,21 +108,33 @@ $ErrorActionPreference = "Stop"
 # ==============================================================================
 # 0x00 // ENVIRONMENT & DIRECTORY INITIALIZATION
 # ==============================================================================
-$ScriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Definition }
-$ConfigDir  = Join-Path $ScriptRoot "config"
-$ModulesDir = Join-Path $ScriptRoot "modules"
-$BackupDir  = Join-Path $ScriptRoot "backups"
-$LogDir     = Join-Path $ScriptRoot "logs"
-$ExtDir     = Join-Path $ConfigDir  "chrome-tabgroups-ext"
+$ScriptRoot  = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Definition }
+$ConfigDir   = Join-Path $ScriptRoot "config"
+$ProfilesDir = Join-Path $ConfigDir  "profiles"
+$ModulesDir  = Join-Path $ScriptRoot "modules"
+$BackupDir   = Join-Path $ScriptRoot "backups"
+$LogDir      = Join-Path $ScriptRoot "logs"
+$ExtDir      = Join-Path $ConfigDir  "chrome-tabgroups-ext"
 
-foreach ($dir in @($ConfigDir, $ModulesDir, $BackupDir, $LogDir)) {
+foreach ($dir in @($ConfigDir, $ProfilesDir, $ModulesDir, $BackupDir, $LogDir)) {
     if (-not (Test-Path $dir)) {
         New-Item -ItemType Directory -Path $dir -Force | Out-Null
     }
 }
 
+$PresetProfileMap = @{
+    "PentestLab"     = Join-Path $ProfilesDir "profile-pentest-lab.json"
+    "HamShack"       = Join-Path $ProfilesDir "profile-ham-shack.json"
+    "CyberProfessor" = Join-Path $ProfilesDir "profile-cyber-professor.json"
+    "Custom"         = Join-Path $ConfigDir   "startup-profile.json"
+}
+
 if (-not $ConfigPath) {
-    $ConfigPath = Join-Path $ConfigDir "startup-profile.json"
+    $ConfigPath = $PresetProfileMap[$Profile]
+    # If the user passed -Profile PentestLab/HamShack/CyberProfessor without -Mode, default to Run!
+    if ($Profile -ne "Custom" -and $PSBoundParameters.ContainsKey("Profile") -and (-not $PSBoundParameters.ContainsKey("Mode"))) {
+        $Mode = "Run"
+    }
 }
 
 $IsWindowsHost = ($env:OS -match "Windows") -or ($PSVersionTable.Platform -eq "Win32NT") -or ([System.Environment]::OSVersion.Platform -eq "Win32NT")
@@ -1731,21 +1755,27 @@ switch ($Mode) {
         Write-Host "    | [COMMAND CENTER MENU] Choose Your Mighty Morphin PowerShell Action:              |" -ForegroundColor Cyan
         Write-Host "    |   [1] INTERACTIVE WIZARD (Console TUI) : Pick Apps, Chrome Tab Groups & Modules  |" -ForegroundColor White
         Write-Host "    |   [2] INTERACTIVE WIZARD (Out-GridView): Pick Registry Apps via Windows GUI      |" -ForegroundColor White
-        Write-Host "    |   [3] EXECUTE STARTUP PROFILE NOW      : Run Saved Modules, Apps & Tab Groups    |" -ForegroundColor Green
-        Write-Host "    |   [4] FORENSIC AUDIT                   : Inspect shell:startup, Registry & Zords |" -ForegroundColor White
-        Write-Host "    |   [5] CREATE NEW CUSTOM .PSM1 MODULE   : Scaffold a Custom PowerShell Zord Module|" -ForegroundColor Yellow
-        Write-Host "    |   [6] INSTALL TO WINDOWS STARTUP       : Register in shell:startup (+Backup)     |" -ForegroundColor White
+        Write-Host "    |   [3] EXECUTE CUSTOM STARTUP PROFILE   : Run Your Saved startup-profile.json     |" -ForegroundColor Green
+        Write-Host "    |   [4] LAUNCH PENTEST LAB PROFILE       : VMware/VirtualBox + Wireshark + RedTeam |" -ForegroundColor Green
+        Write-Host "    |   [5] LAUNCH BUDGET HAM SHACK PROFILE  : FLRIG -> WSJT-X -> GridTracker -> Ham2K |" -ForegroundColor Yellow
+        Write-Host "    |   [6] LAUNCH CYBER PROFESSOR PROFILE   : VS Code + Obsidian + SO-CRATES + CLARK  |" -ForegroundColor Cyan
+        Write-Host "    |   [7] FORENSIC AUDIT                   : Inspect shell:startup, Registry & Zords |" -ForegroundColor White
+        Write-Host "    |   [8] CREATE NEW CUSTOM .PSM1 MODULE   : Scaffold a Custom PowerShell Zord Module|" -ForegroundColor Magenta
+        Write-Host "    |   [9] INSTALL TO WINDOWS STARTUP       : Register in shell:startup (+Backup)     |" -ForegroundColor White
         Write-Host "    |   [Q] QUIT COMMAND CENTER                                                        |" -ForegroundColor DarkGray
         Write-Host "    +----------------------------------------------------------------------------------+" -ForegroundColor Cyan
 
-        $choice = Read-HostWithDefault -Prompt "Select Option (1-6 or Q)" -DefaultValue "1"
+        $choice = Read-HostWithDefault -Prompt "Select Option (1-9 or Q)" -DefaultValue "1"
         switch ($choice.ToUpper()) {
             "1" { Invoke-WizardFlow -DemoMode:$useDemo }
             "2" { $UseGridView = $true; Invoke-WizardFlow -DemoMode:$useDemo }
-            "3" { & $PSCommandPath -Mode Run -ConfigPath $ConfigPath -DryRun:$DryRun -NoBanner }
-            "4" { & $PSCommandPath -Mode Audit -NoBanner }
-            "5" { & $PSCommandPath -Mode NewModule -NoBanner }
-            "6" { & $PSCommandPath -Mode Install -ConfigPath $ConfigPath -NoBanner }
+            "3" { & $PSCommandPath -Mode Run -Profile Custom -DryRun:$DryRun -NoBanner }
+            "4" { & $PSCommandPath -Mode Run -Profile PentestLab -DryRun:$DryRun -NoBanner }
+            "5" { & $PSCommandPath -Mode Run -Profile HamShack -DryRun:$DryRun -NoBanner }
+            "6" { & $PSCommandPath -Mode Run -Profile CyberProfessor -DryRun:$DryRun -NoBanner }
+            "7" { & $PSCommandPath -Mode Audit -NoBanner }
+            "8" { & $PSCommandPath -Mode NewModule -NoBanner }
+            "9" { & $PSCommandPath -Mode Install -ConfigPath $ConfigPath -NoBanner }
             default { Write-Log "May the Power protect you! // EOF 0xFF" -Level OK }
         }
     }

@@ -1,0 +1,123 @@
+{
+  "SchemaVersion": "1.0.0",
+  "ProfileTitle": "Yellow Sabertooth — The Ultimate Budget Ham Shack (VK1ED Concept + CSRA KR4JLC)",
+  "Author": "Mighty Morphin Windows Rangers // Invoke-MorphinStartup.ps1 -Profile HamShack",
+  "UpdatedAtUtc": "2026-11-18T22:28:00.0000000Z",
+  "VerifyAuthenticode": false,
+  "CustomModules": [
+    {
+      "ModuleName": "Morphin.HamShack",
+      "ZordName": "Sabertooth Tiger Ultimate Budget Ham Shack & CAT Zord",
+      "ModulePath": "modules\\Morphin.HamShack.psm1",
+      "Enabled": true,
+      "Settings": {
+        "Callsign": "KR4JLC",
+        "GridSquare": "EM83",
+        "ProbeComPorts": true,
+        "StaggerCatSec": 4
+      }
+    },
+    {
+      "ModuleName": "Morphin.NetCheck",
+      "ZordName": "Triceratops Network & VPN Telemetry Zord",
+      "ModulePath": "modules\\Morphin.NetCheck.psm1",
+      "Enabled": true,
+      "Settings": {
+        "PingTarget": "1.1.1.1",
+        "DnsCheckHost": "pskreporter.info",
+        "CheckVpn": false
+      }
+    }
+  ],
+  "StartupApplications": [
+    {
+      "Name": "1. FLRIG (Transceiver CAT Control Master Linchpin)",
+      "Origin": "Registry (HKLM (32-Bit WOW))",
+      "ExecutablePath": "C:\\Program Files (x86)\\flrig\\flrig.exe",
+      "Arguments": "",
+      "ProcessName": "flrig",
+      "DelaySeconds": 4,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "2. WSJT-X (FT8 / FT4 Weak-Signal Digital Modes via FLRIG)",
+      "Origin": "Registry (HKLM (64-Bit))",
+      "ExecutablePath": "C:\\WSJT\\wsjtx\\bin\\wsjtx.exe",
+      "Arguments": "",
+      "ProcessName": "wsjtx",
+      "DelaySeconds": 3,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "3. GridTracker (Live UDP Multicast QSO Map & Callsign Roster)",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Program Files\\GridTracker\\GridTracker.exe",
+      "Arguments": "",
+      "ProcessName": "GridTracker",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "4. Ham2K Portable Logger (Cloud & POTA/SOTA/LoTW/QRZ QSO Logger)",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Programs\\Ham2K PoLo\\Ham2K PoLo.exe",
+      "Arguments": "",
+      "ProcessName": "Ham2K PoLo",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "5. CHIRP-next (VHF/UHF & CSRA Repeater Codeplug Programmer)",
+      "Origin": "Registry (HKLM (32-Bit WOW))",
+      "ExecutablePath": "C:\\Program Files (x86)\\CHIRP\\chirpw.exe",
+      "Arguments": "",
+      "ProcessName": "chirpw",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    }
+  ],
+  "BrowserConfiguration": {
+    "Enabled": true,
+    "BrowserKey": "Chrome",
+    "BrowserName": "Google Chrome",
+    "ExecutablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "ProfileName": "Default",
+    "LaunchMode": "ChromeNativeTabGroups",
+    "TabGroups": [
+      {
+        "GroupName": "Shack WallBoard & Propagation",
+        "Color": "yellow",
+        "Collapsed": false,
+        "Urls": [
+          "https://www.vkhamradio.com/the-ultimate-budget-ham-shack-overview-and-concept/",
+          "https://pskreporter.info/pskmap.html",
+          "https://dxheat.com/dxc/",
+          "https://www.hamqsl.com/solar.html",
+          "https://time.is/UTC"
+        ]
+      },
+      {
+        "GroupName": "POTA / SOTA / QRZ & Logging",
+        "Color": "orange",
+        "Collapsed": false,
+        "Urls": [
+          "https://pota.app/",
+          "https://www.qrz.com/",
+          "https://lotw.arrl.org/",
+          "https://polologger.com/"
+        ]
+      },
+      {
+        "GroupName": "CSRA W4DV & DMR Repeaters",
+        "Color": "green",
+        "Collapsed": true,
+        "Urls": [
+          "https://github.com/popeye1919/csra-ham-dmr-automation",
+          "https://w4dv.club/repeaters/area-repeaters/",
+          "https://tgif.network/",
+          "https://chirpmyradio.com/projects/chirp/wiki/Home"
+        ]
+      }
+    ]
+  }
+}

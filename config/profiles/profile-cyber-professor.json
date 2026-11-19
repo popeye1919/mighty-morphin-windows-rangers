@@ -1,0 +1,97 @@
+{
+  "SchemaVersion": "1.0.0",
+  "ProfileTitle": "Blue Triceratops — Cyber Professor Teaching, Grading & Research Deck",
+  "Author": "Mighty Morphin Windows Rangers // Invoke-MorphinStartup.ps1 -Profile CyberProfessor",
+  "UpdatedAtUtc": "2026-11-18T22:28:00.0000000Z",
+  "VerifyAuthenticode": false,
+  "CustomModules": [
+    {
+      "ModuleName": "Morphin.Alpha5Greeting",
+      "ZordName": "Tyrannosaurus & Alpha-5 Command Center Briefing Zord",
+      "ModulePath": "modules\\Morphin.Alpha5Greeting.psm1",
+      "Enabled": true,
+      "Settings": {
+        "RangerCallsign": "Dr. Singleton (Professor Ranger)",
+        "EnableVoiceTts": false
+      }
+    },
+    {
+      "ModuleName": "Morphin.CyberLab",
+      "ZordName": "Mastodon Cyber Range & WSL2 Zord",
+      "ModulePath": "modules\\Morphin.CyberLab.psm1",
+      "Enabled": true,
+      "Settings": {
+        "WslDistro": "kali-linux",
+        "DockerContainer": "so-crates-lab"
+      }
+    }
+  ],
+  "StartupApplications": [
+    {
+      "Name": "Visual Studio Code",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+      "Arguments": "",
+      "ProcessName": "Code",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "Obsidian (Lecture Notes & Knowledge Graph)",
+      "Origin": "Registry (HKCU (Per-User))",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Programs\\Obsidian\\Obsidian.exe",
+      "Arguments": "",
+      "ProcessName": "Obsidian",
+      "DelaySeconds": 2,
+      "WindowStyle": "Normal"
+    },
+    {
+      "Name": "Docker Desktop (SO-CRATES Lab Engine)",
+      "Origin": "Common Startup Folder (shell:common startup)",
+      "ExecutablePath": "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe",
+      "Arguments": "",
+      "ProcessName": "Docker Desktop",
+      "DelaySeconds": 3,
+      "WindowStyle": "Minimized"
+    },
+    {
+      "Name": "Discord (Cyber Club & Student Office Hours)",
+      "Origin": "User Startup Folder (shell:startup)",
+      "ExecutablePath": "C:\\Users\\HackerDad\\AppData\\Local\\Discord\\Update.exe",
+      "Arguments": "--processStart Discord.exe",
+      "ProcessName": "Discord",
+      "DelaySeconds": 2,
+      "WindowStyle": "Minimized"
+    }
+  ],
+  "BrowserConfiguration": {
+    "Enabled": true,
+    "BrowserKey": "Chrome",
+    "BrowserName": "Google Chrome",
+    "ExecutablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "ProfileName": "Default",
+    "LaunchMode": "ChromeNativeTabGroups",
+    "TabGroups": [
+      {
+        "GroupName": "Course Syllabi & GitHub Labs",
+        "Color": "blue",
+        "Collapsed": false,
+        "Urls": [
+          "https://github.com/popeye1919/Network_Forensics_Course",
+          "https://github.com/popeye1919/Penetration_Testing_Course",
+          "https://github.com/popeye1919/mighty-morphin-windows-rangers"
+        ]
+      },
+      {
+        "GroupName": "CLARK / NICE / DCWF Standards",
+        "Color": "cyan",
+        "Collapsed": false,
+        "Urls": [
+          "https://clark.center/",
+          "https://scholar.google.com/",
+          "https://attack.mitre.org/"
+        ]
+      }
+    ]
+  }
+}

@@ -2,7 +2,8 @@
 .SYNOPSIS
     Automated Self-Test & Verification Suite for Invoke-MorphinStartup.ps1.
     Validates PowerShell AST syntax, Custom Zord Module discovery (-Mode ListModules),
-    NewModule scaffolding (-Mode NewModule), Audit mode, and DryRun execution.
+    Preset Profiles (-Profile PentestLab, -Profile HamShack, -Profile CyberProfessor),
+    Audit mode, and DryRun execution.
 #>
 
 $ErrorActionPreference = "Stop"
@@ -27,7 +28,7 @@ foreach ($f in $filesToParse) {
         throw "Syntax errors detected in ${f}: $($errors | Out-String)"
     }
 }
-Write-Host "[+] Test 1 PASSED: Zero syntax errors across main script and all custom Zord modules!" -ForegroundColor Green
+Write-Host "[+] Test 1 PASSED: Zero syntax errors across main script and all 5 custom Zord modules!" -ForegroundColor Green
 
 # Test 2: Custom Module Discovery (-Mode ListModules)
 Write-Host "[*] Test 2: Running -Mode ListModules -NoBanner..." -ForegroundColor Yellow
@@ -39,16 +40,18 @@ Write-Host "[*] Test 3: Running -Mode Audit -NoBanner..." -ForegroundColor Yello
 & $MainScript -Mode Audit -NoBanner | Out-Null
 Write-Host "[+] Test 3 PASSED: Audit mode inspected Startup Folder, Registry Uninstall hives, Browsers, and Modules!" -ForegroundColor Green
 
-# Test 4: Run Mode with Example Config (-DryRun) & Chrome Tab Group Synthesis
-Write-Host "[*] Test 4: Running -Mode Run with startup-profile.example.json (-DryRun)..." -ForegroundColor Yellow
-& $MainScript -Mode Run -ConfigPath $ExampleCfg -DryRun -NoBanner
+# Test 4: Run Mode with Preset Profiles (-Profile PentestLab, HamShack, CyberProfessor)
+foreach ($prof in @("PentestLab", "HamShack", "CyberProfessor")) {
+    Write-Host "[*] Test 4 ($prof): Running -Mode Run -Profile $prof -DryRun..." -ForegroundColor Yellow
+    & $MainScript -Mode Run -Profile $prof -DryRun -NoBanner
+}
 if (-not (Test-Path (Join-Path $ExtDir "manifest.json"))) {
     throw "Expected Chrome Tab Group manifest.json was not created in $ExtDir!"
 }
 if (-not (Test-Path (Join-Path $ExtDir "background.js"))) {
     throw "Expected Chrome Tab Group background.js was not created in $ExtDir!"
 }
-Write-Host "[+] Test 4 PASSED: DryRun execution of custom modules, apps, and Chrome Tab Group Manifest V3 generation verified!" -ForegroundColor Green
+Write-Host "[+] Test 4 PASSED: All 3 Preset Profiles (PentestLab, HamShack, CyberProfessor) & Chrome Tab Group Manifest V3 generation verified!" -ForegroundColor Green
 
 Write-Host "==================================================================" -ForegroundColor Cyan
 Write-Host " [ALL TESTS PASSED] It's Morphin Time! // EOF 0xFF" -ForegroundColor Green
